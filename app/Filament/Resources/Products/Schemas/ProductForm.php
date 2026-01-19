@@ -2,14 +2,13 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
-use App\Enums\ProductStatus;
-use App\Models\Product;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Schemas\Components\Utilities\Set;
+use App\Filament\Resources\Products\Schemas\Components\ProductCostInput;
+use App\Filament\Resources\Products\Schemas\Components\ProductDescriptionTextarea;
+use App\Filament\Resources\Products\Schemas\Components\ProductNameInput;
+use App\Filament\Resources\Products\Schemas\Components\ProductPriceInput;
+use App\Filament\Resources\Products\Schemas\Components\ProductSlugInput;
+use App\Filament\Resources\Products\Schemas\Components\ProductStatusSelect;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class ProductForm
 {
@@ -18,26 +17,12 @@ class ProductForm
         return $schema
             ->columns(1)
             ->components([
-                TextInput::make('name')
-                    ->afterStateUpdated(function (Set $set, $state) {
-                        $set('slug', Str::slug($state));
-                    })
-                    ->live(true)
-                    ->required(),
-                TextInput::make('slug')
-                    ->required()
-                    ->unique(Product::class, 'slug', ignoreRecord: true),
-                Textarea::make('description'),
-                TextInput::make('cost')
-                    ->numeric(),
-                TextInput::make('price')
-                    ->required()
-                    ->numeric(),
-                Select::make('status')
-                    ->options(ProductStatus::class)
-                    ->required()
-                    ->searchable()
-                    ->default(ProductStatus::Enabled),
+                ProductNameInput::make(),
+                ProductSlugInput::make(),
+                ProductDescriptionTextarea::make(),
+                ProductCostInput::make(),
+                ProductPriceInput::make(),
+                ProductStatusSelect::make(),
             ]);
     }
 }

@@ -2,8 +2,15 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
-use App\Models\Product;
-use Filament\Infolists\Components\TextEntry;
+use App\Filament\Resources\Products\Schemas\Components\ProductCostEntry;
+use App\Filament\Resources\Products\Schemas\Components\ProductCreatedAtEntry;
+use App\Filament\Resources\Products\Schemas\Components\ProductDeletedAtEntry;
+use App\Filament\Resources\Products\Schemas\Components\ProductDescriptionEntry;
+use App\Filament\Resources\Products\Schemas\Components\ProductNameEntry;
+use App\Filament\Resources\Products\Schemas\Components\ProductPriceEntry;
+use App\Filament\Resources\Products\Schemas\Components\ProductSlugEntry;
+use App\Filament\Resources\Products\Schemas\Components\ProductStatusEntry;
+use App\Filament\Resources\Products\Schemas\Components\ProductUpdatedAtEntry;
 use Filament\Schemas\Schema;
 
 class ProductInfolist
@@ -12,26 +19,15 @@ class ProductInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name'),
-                TextEntry::make('slug'),
-                TextEntry::make('description')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('cost')
-                    ->money(),
-                TextEntry::make('price')
-                    ->money(),
-                TextEntry::make('status')
-                    ->badge(),
-                TextEntry::make('created_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('updated_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('deleted_at')
-                    ->dateTime()
-                    ->visible(fn (Product $record): bool => $record->trashed()),
+                ProductStatusEntry::make(),
+                ProductNameEntry::make(),
+                ProductSlugEntry::make(),
+                ProductDescriptionEntry::make(),
+                ProductCostEntry::make(),
+                ProductPriceEntry::make(),
+                ProductCreatedAtEntry::make(),
+                ProductUpdatedAtEntry::make(),
+                ProductDeletedAtEntry::make(),
             ]);
     }
 }

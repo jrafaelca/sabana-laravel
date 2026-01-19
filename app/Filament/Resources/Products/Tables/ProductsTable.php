@@ -2,6 +2,16 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use App\Filament\Resources\Products\Tables\Columns\ProductCostColumn;
+use App\Filament\Resources\Products\Tables\Columns\ProductCreatedAtColumn;
+use App\Filament\Resources\Products\Tables\Columns\ProductDeletedAtColumn;
+use App\Filament\Resources\Products\Tables\Columns\ProductNameColumn;
+use App\Filament\Resources\Products\Tables\Columns\ProductPriceColumn;
+use App\Filament\Resources\Products\Tables\Columns\ProductSlugColumn;
+use App\Filament\Resources\Products\Tables\Columns\ProductStatusColumn;
+use App\Filament\Resources\Products\Tables\Columns\ProductUpdatedAtColumn;
+use App\Filament\Resources\Products\Tables\Filters\ProductStatusFilter;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -11,7 +21,6 @@ use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
@@ -21,41 +30,28 @@ class ProductsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
-                TextColumn::make('cost')
-                    ->money()
-                    ->sortable(),
-                TextColumn::make('price')
-                    ->money()
-                    ->sortable(),
-                TextColumn::make('status')
-                    ->badge()
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                ProductStatusColumn::make(),
+                ProductNameColumn::make(),
+                ProductSlugColumn::make(),
+                ProductCostColumn::make(),
+                ProductPriceColumn::make(),
+                ProductCreatedAtColumn::make(),
+                ProductUpdatedAtColumn::make(),
+                ProductCreatedAtColumn::make(),
+                ProductDeletedAtColumn::make(),
             ])
             ->filters([
+                ProductStatusFilter::make(),
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                ViewAction::make()->modalWidth('lg'),
-                EditAction::make()->modalWidth('lg'),
-                DeleteAction::make(),
-                ForceDeleteAction::make(),
-                RestoreAction::make(),
+                ActionGroup::make([
+                    ViewAction::make()->modalWidth('lg'),
+                    EditAction::make()->modalWidth('lg'),
+                    DeleteAction::make(),
+                    ForceDeleteAction::make(),
+                    RestoreAction::make(),
+                ])
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
