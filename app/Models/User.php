@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -48,8 +49,27 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+    /**
+     * Determine if the user can access the Filament admin panel.
+     */
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->hasVerifiedEmail();
+    }
+
+    /**
+     * Get the created orders for the user.
+     */
+    public function createdOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'creator_id');
+    }
+
+    /**
+     * Get the served orders for the user.
+     */
+    public function servedOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'server_id');
     }
 }

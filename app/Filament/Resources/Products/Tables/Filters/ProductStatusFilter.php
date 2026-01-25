@@ -9,7 +9,7 @@ class ProductStatusFilter
 {
     public static function make(): SelectFilter
     {
-        return SelectFilter::make('state')
+        return SelectFilter::make('status')
             ->label(trans('filament/resources/product.table.filters.status.label'))
             ->options(ProductStatus::class)
             ->searchable();

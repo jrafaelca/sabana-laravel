@@ -27,7 +27,6 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('')
-            ->login()
             ->colors([
                 'primary' => Color::Emerald,
             ])
@@ -57,6 +56,7 @@ class AdminPanelProvider extends PanelProvider
             ->spa(hasPrefetching: true)
             ->unsavedChangesAlerts()
             ->userMenu(position: UserMenuPosition::Sidebar)
-            ->sidebarCollapsibleOnDesktop();
+            ->sidebarCollapsibleOnDesktop()
+            ->login();
     }
 }
