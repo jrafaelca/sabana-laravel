@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Orders\Schemas\Components;
 
 use Filament\Forms\Components\TextInput;
 
-class OrderProductQuantityInput
+class OrderItemQuantityInput
 {
     public static function make(): TextInput
     {

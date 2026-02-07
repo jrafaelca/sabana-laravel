@@ -6,7 +6,7 @@ use App\Models\Product;
 use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
 
-class OrderProductSelect
+class OrderItemProductSelect
 {
     public static function make(): Select
     {
@@ -26,8 +26,8 @@ class OrderProductSelect
             ->reactive()
             ->afterStateUpdated(function ($state, callable $set, callable $get) {
                 if (! $state) {
-                    $set('price', null);
-                    $set('total', null);
+                    $set('unit_price', null);
+                    $set('total_price', null);
                     return;
                 }
 
@@ -37,8 +37,8 @@ class OrderProductSelect
 
                 $quantity = (int) ($get('quantity') ?? 1);
 
-                $set('price', $price);
-                $set('total', $price * $quantity);
+                $set('unit_price', $price);
+                $set('total_price', $price * $quantity);
             })
             ->disableOptionsWhenSelectedInSiblingRepeaterItems();
     }

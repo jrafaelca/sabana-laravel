@@ -51,4 +51,36 @@ return [
     'form.fields.status.hint' => '',
     'form.fields.status.hint_tooltip' => 'El estado determina si la marca está activa o inactiva en el sistema.',
 
+    // Infolist
+    'infolist.status.label' => 'Estado',
+    'infolist.status.hint' => '',
+    'infolist.status.helper_text' => '',
+
+    'infolist.name.label' => 'Nombre',
+    'infolist.name.hint' => '',
+    'infolist.name.helper_text' => '',
+
+    'infolist.slug.label' => 'Slug',
+    'infolist.slug.hint' => '',
+    'infolist.slug.helper_text' => '',
+
+    'infolist.description.label' => 'Descripción',
+    'infolist.description.hint' => '',
+    'infolist.description.helper_text' => '',
+
+    'infolist.cost.label' => 'Costo',
+    'infolist.cost.hint' => '',
+    'infolist.cost.helper_text' => '',
+
+    'infolist.price.label' => 'Precio',
+    'infolist.price.hint' => '',
+    'infolist.price.helper_text' => '',
+
+    'infolist.created_at.label' => 'Fecha de creación',
+    'infolist.created_at.hint' => '',
+    'infolist.created_at.helper_text' => '',
+
+    'infolist.updated_at.label' => 'Fecha de actualización',
+    'infolist.updated_at.hint' => '',
+    'infolist.updated_at.helper_text' => '',
 ];

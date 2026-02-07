@@ -60,4 +60,15 @@ class OrderProduct extends Pivot
     {
         return $this->belongsTo(Product::class);
     }
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (OrderProduct $orderProduct) {
+            $orderProduct->description = $orderProduct->product->name;
+            $orderProduct->cost = $orderProduct->product->cost;
+        });
+    }
 }

@@ -34,15 +34,15 @@ return [
     'form.fields.quantity.helper_text' => '',
     'form.fields.quantity.hint' => '',
 
-    'form.fields.price.label' => 'Precio',
-    'form.fields.price.placeholder' => 'Ingresa el precio',
-    'form.fields.price.helper_text' => '',
-    'form.fields.price.hint' => '',
+    'form.fields.unit_price.label' => 'Precio',
+    'form.fields.unit_price.placeholder' => 'Ingresa el precio',
+    'form.fields.unit_price.helper_text' => '',
+    'form.fields.unit_price.hint' => '',
 
-    'form.fields.total.label' => 'Total',
-    'form.fields.total.placeholder' => 'Ingresa el total',
-    'form.fields.total.helper_text' => '',
-    'form.fields.total.hint' => '',
+    'form.fields.total_price.label' => 'Total',
+    'form.fields.total_price.placeholder' => 'Ingresa el total',
+    'form.fields.total_price.helper_text' => '',
+    'form.fields.total_price.hint' => '',
 
     'form.fields.notes.label' => 'Notas',
     'form.fields.notes.placeholder' => 'Ingresa las notas de la orden',

@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Orders\Schemas\Components;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Repeater\TableColumn;
 
-class OrderProductRepeater
+class OrderItemsRepeater
 {
     public static function make(): Repeater
     {
@@ -19,10 +19,10 @@ class OrderProductRepeater
                 TableColumn::make(trans('filament/resources/order.table.columns.total')),
             ])
             ->schema([
-                OrderProductSelect::make(),
-                OrderProductQuantityInput::make(),
-                OrderProductPriceInput::make(),
-                OrderProductTotalInput::make(),
+                OrderItemProductSelect::make(),
+                OrderItemQuantityInput::make(),
+                OrderItemUnitPriceInput::make(),
+                OrderItemTotalPriceInput::make(),
             ])
             ->columns(3)
             ->columnSpanFull();
