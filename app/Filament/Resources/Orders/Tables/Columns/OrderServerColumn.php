@@ -11,6 +11,6 @@ class OrderServerColumn
         return TextColumn::make('server.name')
             ->label(trans('filament/resources/order.table.columns.server'))
             ->sortable()
-            ->toggleable();
+            ->toggleable(isToggledHiddenByDefault: true);
     }
 }

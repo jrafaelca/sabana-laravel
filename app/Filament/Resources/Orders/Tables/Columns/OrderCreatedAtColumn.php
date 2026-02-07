@@ -12,6 +12,6 @@ class OrderCreatedAtColumn
             ->label(trans('filament/resources/order.table.columns.created_at'))
             ->dateTime()
             ->sortable()
-            ->toggleable(isToggledHiddenByDefault: true);
+            ->toggleable();
     }
 }

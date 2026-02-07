@@ -11,8 +11,7 @@ class OrderStatusColumn
         return TextColumn::make('status')
             ->label(trans('filament/resources/order.table.columns.status'))
             ->badge()
-            ->dateTime()
             ->sortable()
-            ->toggleable(isToggledHiddenByDefault: true);
+            ->toggleable();
     }
 }
