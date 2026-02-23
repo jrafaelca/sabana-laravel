@@ -44,10 +44,14 @@ return [
     'form.fields.total_price.helper_text' => '',
     'form.fields.total_price.hint' => '',
 
+    'form.fields.grand_total.label' => 'Total de la orden',
+
     'form.fields.notes.label' => 'Notas',
     'form.fields.notes.placeholder' => 'Ingresa las notas de la orden',
     'form.fields.notes.helper_text' => 'Detalles adicionales sobre la orden.',
     'form.fields.notes.hint' => '',
+
+    'form.sections.grand_total.label' => 'Resumen',
 
     'form.fields.status.label' => 'Estado',
     'form.fields.status.placeholder' => 'Selecciona el estado',

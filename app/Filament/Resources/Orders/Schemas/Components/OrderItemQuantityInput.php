@@ -18,10 +18,10 @@ class OrderItemQuantityInput
             ->minValue(1)
             ->reactive()
             ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                $price = (float)($get('price') ?? 0);
-                $quantity = (int)($state ?? 0);
+                $quantity = max(1, (int) ($state ?? 1));
+                $unitPrice = (float) ($get('unit_price') ?? 0);
 
-                $set('total', $price * $quantity);
+                $set('total_price', $unitPrice * $quantity);
             })
             ->required();
     }

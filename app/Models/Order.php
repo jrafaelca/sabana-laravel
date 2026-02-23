@@ -21,6 +21,7 @@ class Order extends Model
         'status',
         'completed_at',
         'notes',
+        'total',
         'creator_id',
         'server_id',
     ];
@@ -35,6 +36,7 @@ class Order extends Model
         return [
             'status' => OrderStatus::class,
             'completed_at' => 'datetime',
+            'total' => 'decimal:2',
         ];
     }
 
