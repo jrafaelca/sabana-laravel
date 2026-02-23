@@ -119,4 +119,48 @@ class ModelBehaviorTest extends TestCase
 
         $this->assertInstanceOf(Panel::class, $configuredPanel);
     }
+
+    public function test_order_product_cost_snapshot_is_kept_when_product_cost_changes(): void
+    {
+        $creator = User::factory()->create();
+        $server = User::factory()->create();
+
+        $order = Order::query()->create([
+            'status' => OrderStatus::Completed,
+            'notes' => 'Mesa 4',
+            'total' => 10.00,
+            'creator_id' => $creator->id,
+            'server_id' => $server->id,
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Empanada',
+            'slug' => 'empanada',
+            'description' => 'Carne',
+            'cost' => 2.50,
+            'price' => 5.00,
+            'status' => ProductStatus::Enabled,
+        ]);
+
+        $orderProduct = OrderProduct::query()->create([
+            'order_id' => $order->id,
+            'product_id' => $product->id,
+            'sort' => 0,
+            'quantity' => 2,
+            'description' => '',
+            'cost' => 0,
+            'unit_price' => 5.00,
+            'total_price' => 10.00,
+        ]);
+
+        $this->assertSame(2.50, (float) $orderProduct->cost);
+
+        $product->update([
+            'cost' => 3.75,
+        ]);
+
+        $orderProduct->refresh();
+
+        $this->assertSame(2.50, (float) $orderProduct->cost);
+    }
 }
