@@ -13,11 +13,11 @@ class EditOrder extends EditRecord
 {
     protected static string $resource = OrderResource::class;
 
-    protected function mutateFormDataBeforeSave(array $data): array
+    protected function afterSave(): void
     {
-        $data['total'] = CalculateOrderTotalAction::handle($data['orderProducts'] ?? []);
-
-        return $data;
+        $this->record->update([
+            'total' => CalculateOrderTotalAction::forOrder($this->record),
+        ]);
     }
 
     protected function getHeaderActions(): array

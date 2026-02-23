@@ -12,11 +12,11 @@ class CreateOrder extends CreateRecord
 {
     protected static string $resource = OrderResource::class;
 
-    protected function mutateFormDataBeforeCreate(array $data): array
+    protected function afterCreate(): void
     {
-        $data['total'] = CalculateOrderTotalAction::handle($data['orderProducts'] ?? []);
-
-        return $data;
+        $this->record->update([
+            'total' => CalculateOrderTotalAction::forOrder($this->record),
+        ]);
     }
 
     protected function handleRecordCreation(array $data): Model
