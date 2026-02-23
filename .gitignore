@@ -19,6 +19,13 @@
 /storage/*.key
 /storage/pail
 /vendor
+# Auto-generated MCP / agent guidance files
+/.mcp.json
+/boost.json
+/AGENTS.md
+/CLAUDE.md
+/.junie
+/junie
 Homestead.json
 Homestead.yaml
 Thumbs.db
