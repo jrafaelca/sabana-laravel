@@ -51,6 +51,23 @@ use App\Filament\Resources\Products\Tables\Columns\ProductStatusColumn;
 use App\Filament\Resources\Products\Tables\Columns\ProductUpdatedAtColumn;
 use App\Filament\Resources\Products\Tables\Filters\ProductStatusFilter;
 use App\Filament\Resources\Products\Tables\ProductsTable;
+use App\Filament\Resources\Users\Schemas\Components\UserCreatedAtEntry;
+use App\Filament\Resources\Users\Schemas\Components\UserEmailEntry;
+use App\Filament\Resources\Users\Schemas\Components\UserEmailInput;
+use App\Filament\Resources\Users\Schemas\Components\UserEmailVerifiedAtEntry;
+use App\Filament\Resources\Users\Schemas\Components\UserNameEntry;
+use App\Filament\Resources\Users\Schemas\Components\UserNameInput;
+use App\Filament\Resources\Users\Schemas\Components\UserPasswordInput;
+use App\Filament\Resources\Users\Schemas\Components\UserUpdatedAtEntry;
+use App\Filament\Resources\Users\Schemas\UserForm;
+use App\Filament\Resources\Users\Schemas\UserInfolist;
+use App\Filament\Resources\Users\Tables\Columns\UserCreatedAtColumn;
+use App\Filament\Resources\Users\Tables\Columns\UserEmailColumn;
+use App\Filament\Resources\Users\Tables\Columns\UserEmailVerifiedAtColumn;
+use App\Filament\Resources\Users\Tables\Columns\UserNameColumn;
+use App\Filament\Resources\Users\Tables\Columns\UserUpdatedAtColumn;
+use App\Filament\Resources\Users\Tables\UsersTable;
+use App\Filament\Resources\Users\UserResource;
 use App\Models\Product;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
@@ -134,29 +151,58 @@ class FilamentComponentFactoriesTest extends TestCase
         $this->assertInstanceOf(SelectFilter::class, ProductStatusFilter::make());
     }
 
+    public function test_user_schema_component_factories_return_expected_instances(): void
+    {
+        $this->assertInstanceOf(TextInput::class, UserNameInput::make());
+        $this->assertInstanceOf(TextInput::class, UserEmailInput::make());
+        $this->assertInstanceOf(TextInput::class, UserPasswordInput::make());
+
+        $this->assertInstanceOf(TextEntry::class, UserNameEntry::make());
+        $this->assertInstanceOf(TextEntry::class, UserEmailEntry::make());
+        $this->assertInstanceOf(TextEntry::class, UserEmailVerifiedAtEntry::make());
+        $this->assertInstanceOf(TextEntry::class, UserCreatedAtEntry::make());
+        $this->assertInstanceOf(TextEntry::class, UserUpdatedAtEntry::make());
+    }
+
+    public function test_user_table_column_factories_return_expected_instances(): void
+    {
+        $this->assertInstanceOf(TextColumn::class, UserNameColumn::make());
+        $this->assertInstanceOf(TextColumn::class, UserEmailColumn::make());
+        $this->assertInstanceOf(TextColumn::class, UserEmailVerifiedAtColumn::make());
+        $this->assertInstanceOf(TextColumn::class, UserCreatedAtColumn::make());
+        $this->assertInstanceOf(TextColumn::class, UserUpdatedAtColumn::make());
+    }
+
     public function test_form_and_infolist_schema_configuration_methods_return_schema_instances(): void
     {
         $this->assertInstanceOf(Schema::class, OrderForm::configure(Schema::make()));
         $this->assertInstanceOf(Schema::class, ProductForm::configure(Schema::make()));
         $this->assertInstanceOf(Schema::class, ProductInfolist::configure(Schema::make()));
+        $this->assertInstanceOf(Schema::class, UserForm::configure(Schema::make()));
+        $this->assertInstanceOf(Schema::class, UserInfolist::configure(Schema::make()));
 
         $this->assertInstanceOf(Schema::class, OrderResource::form(Schema::make()));
         $this->assertInstanceOf(Schema::class, ProductResource::form(Schema::make()));
         $this->assertInstanceOf(Schema::class, ProductResource::infolist(Schema::make()));
+        $this->assertInstanceOf(Schema::class, UserResource::form(Schema::make()));
+        $this->assertInstanceOf(Schema::class, UserResource::infolist(Schema::make()));
     }
 
     public function test_resource_and_table_configuration_metadata_methods_return_expected_values(): void
     {
         $orderPages = OrderResource::getPages();
         $productPages = ProductResource::getPages();
+        $userPages = UserResource::getPages();
 
         $this->assertArrayHasKey('index', $orderPages);
         $this->assertArrayHasKey('create', $orderPages);
         $this->assertArrayHasKey('edit', $orderPages);
         $this->assertArrayHasKey('index', $productPages);
+        $this->assertArrayHasKey('index', $userPages);
 
         $this->assertSame(['id'], OrderResource::getGloballySearchableAttributes());
         $this->assertSame(['name'], ProductResource::getGloballySearchableAttributes());
+        $this->assertSame(['name', 'email'], UserResource::getGloballySearchableAttributes());
         $this->assertNotEmpty(OrderResource::getModelLabel());
         $this->assertNotEmpty(OrderResource::getPluralModelLabel());
         $this->assertNotEmpty(OrderResource::getNavigationLabel());
@@ -164,9 +210,14 @@ class FilamentComponentFactoriesTest extends TestCase
         $this->assertNotEmpty(ProductResource::getPluralModelLabel());
         $this->assertNotEmpty(ProductResource::getNavigationLabel());
         $this->assertNotEmpty(ProductResource::getNavigationGroup());
+        $this->assertNotEmpty(UserResource::getModelLabel());
+        $this->assertNotEmpty(UserResource::getPluralModelLabel());
+        $this->assertNotEmpty(UserResource::getNavigationLabel());
+        $this->assertNotEmpty(UserResource::getNavigationGroup());
 
         $this->assertSame(OrdersTable::class, OrdersTable::class);
         $this->assertSame(ProductsTable::class, ProductsTable::class);
+        $this->assertSame(UsersTable::class, UsersTable::class);
     }
 
     public function test_order_item_product_select_after_state_updated_callback_computes_prices(): void

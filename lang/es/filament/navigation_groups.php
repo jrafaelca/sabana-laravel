@@ -1,5 +1,6 @@
 <?php
 
 return [
-  'inventory' => 'Inventario',
+    'inventory' => 'Inventario',
+    'system' => 'Sistema',
 ];
