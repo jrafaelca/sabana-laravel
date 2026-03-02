@@ -3,11 +3,13 @@
 namespace Tests\Feature\Orders;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethods;
 use App\Enums\ProductStatus;
 use App\Filament\Resources\Orders\Pages\CreateOrder;
 use App\Filament\Resources\Orders\Pages\EditOrder;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -27,7 +29,6 @@ class OrderFormTotalsTest extends TestCase
         $secondItemKey = Str::uuid()->toString();
 
         Livewire::test(CreateOrder::class)
-            ->set('data.status', OrderStatus::Pending->value)
             ->set('data.notes', 'Mesa 7')
             ->set('data.orderProducts', [
                 $firstItemKey => [
@@ -99,7 +100,6 @@ class OrderFormTotalsTest extends TestCase
         ]);
 
         Livewire::test(EditOrder::class, ['record' => $order->getKey()])
-            ->set('data.status', OrderStatus::InProgress->value)
             ->set('data.notes', 'Mesa 4 actualizada')
             ->set('data.orderProducts', [
                 $firstItemKey => [
@@ -155,6 +155,97 @@ class OrderFormTotalsTest extends TestCase
             ->set('data.orderProducts.1.quantity', 2)
             ->assertSet('data.orderProducts.0.total_price', 30.0)
             ->assertSet('data.orderProducts.1.total_price', 11.0);
+    }
+
+    public function test_it_prevents_marking_an_order_as_completed_when_payments_do_not_cover_total(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $product = $this->createProduct(name: 'Pizza', price: 12.50);
+
+        $order = Order::query()->create([
+            'status' => OrderStatus::InProgress,
+            'creator_id' => $user->id,
+            'server_id' => $user->id,
+            'notes' => 'Mesa 5',
+            'total' => 25.00,
+        ]);
+
+        OrderProduct::query()->create([
+            'order_id' => $order->id,
+            'product_id' => $product->id,
+            'sort' => 0,
+            'quantity' => 2,
+            'description' => $product->name,
+            'cost' => $product->cost,
+            'unit_price' => $product->price,
+            'total_price' => 25.00,
+        ]);
+
+        Payment::query()->create([
+            'reference' => 'PAY-PARTIAL-001',
+            'method' => PaymentMethods::Cash,
+            'amount' => 10.00,
+            'note' => 'Abono parcial',
+            'order_id' => $order->id,
+            'creator_id' => $user->id,
+        ]);
+
+        Livewire::test(EditOrder::class, ['record' => $order->getKey()])
+            ->callAction('completeOrder')
+            ->assertNotified();
+
+        $order->refresh();
+
+        $this->assertSame(OrderStatus::InProgress, $order->status);
+    }
+
+    public function test_it_allows_marking_an_order_as_completed_when_payments_cover_total(): void
+    {
+        $user = User::factory()->create();
+        $otherServer = User::factory()->create();
+        $this->actingAs($user);
+
+        $product = $this->createProduct(name: 'Pasta', price: 15.00);
+
+        $order = Order::query()->create([
+            'status' => OrderStatus::InProgress,
+            'creator_id' => $user->id,
+            'server_id' => $otherServer->id,
+            'notes' => 'Mesa 8',
+            'total' => 30.00,
+        ]);
+
+        OrderProduct::query()->create([
+            'order_id' => $order->id,
+            'product_id' => $product->id,
+            'sort' => 0,
+            'quantity' => 2,
+            'description' => $product->name,
+            'cost' => $product->cost,
+            'unit_price' => $product->price,
+            'total_price' => 30.00,
+        ]);
+
+        Payment::query()->create([
+            'reference' => 'PAY-FULL-001',
+            'method' => PaymentMethods::Cash,
+            'amount' => 30.00,
+            'note' => 'Pago total',
+            'order_id' => $order->id,
+            'creator_id' => $user->id,
+        ]);
+
+        Livewire::test(EditOrder::class, ['record' => $order->getKey()])
+            ->callAction('completeOrder')
+            ->assertNotified();
+
+        $order->refresh();
+
+        $this->assertSame(OrderStatus::Completed, $order->status);
+        $this->assertNotNull($order->completed_at);
+        $this->assertSame($user->id, $order->server_id);
     }
 
     private function createProduct(string $name, float $price): Product

@@ -2,17 +2,13 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
-use App\Filament\Resources\Users\Tables\Columns\UserCreatedAtColumn;
-use App\Filament\Resources\Users\Tables\Columns\UserEmailColumn;
-use App\Filament\Resources\Users\Tables\Columns\UserEmailVerifiedAtColumn;
-use App\Filament\Resources\Users\Tables\Columns\UserNameColumn;
-use App\Filament\Resources\Users\Tables\Columns\UserUpdatedAtColumn;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class UsersTable
@@ -21,11 +17,32 @@ class UsersTable
     {
         return $table
             ->columns([
-                UserNameColumn::make(),
-                UserEmailColumn::make(),
-                UserEmailVerifiedAtColumn::make(),
-                UserCreatedAtColumn::make(),
-                UserUpdatedAtColumn::make(),
+                TextColumn::make('name')
+                    ->label(trans('filament/resources/user.table.columns.name'))
+                    ->grow()
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('email')
+                    ->label(trans('filament/resources/user.table.columns.email'))
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('email_verified_at')
+                    ->label(trans('filament/resources/user.table.columns.email_verified_at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('created_at')
+                    ->label(trans('filament/resources/user.table.columns.created_at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->label(trans('filament/resources/user.table.columns.updated_at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->recordActions([
                 ActionGroup::make([

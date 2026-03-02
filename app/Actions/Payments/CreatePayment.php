@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Payments;
 
 use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 
-class CreatePaymentAction
+class CreatePayment
 {
-    public static function handle(array $data): Payment
+    public static function execute(array $data): Payment
     {
         $data['creator_id'] = Auth::id();
 

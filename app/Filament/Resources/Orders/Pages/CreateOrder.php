@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Orders\Pages;
 
-use App\Actions\CalculateOrderTotalAction;
-use App\Actions\CreateOrderAction;
+use App\Actions\Orders\CalculateOrderTotal;
+use App\Actions\Orders\CreateOrder as CreateOrderAction;
 use App\Filament\Resources\Orders\OrderResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
@@ -15,12 +15,12 @@ class CreateOrder extends CreateRecord
     protected function afterCreate(): void
     {
         $this->record->update([
-            'total' => CalculateOrderTotalAction::forOrder($this->record),
+            'total' => CalculateOrderTotal::forOrder($this->record),
         ]);
     }
 
     protected function handleRecordCreation(array $data): Model
     {
-        return CreateOrderAction::handle($data);
+        return CreateOrderAction::execute($data);
     }
 }

@@ -14,13 +14,22 @@ return [
     'table.columns.quantity' => 'Cantidad',
     'table.columns.price' => 'Precio',
     'table.columns.total' => 'Total',
+    'table.columns.pending_balance' => 'Saldo pendiente',
     'table.columns.completed_at' => 'Fecha de finalización',
     'table.columns.status' => 'Estado',
     'table.columns.created_at' => 'Fecha de creación',
     'table.columns.updated_at' => 'Fecha de actualización',
     'table.columns.deleted_at' => 'Fecha de eliminación',
+    'table.actions.process_order.label' => 'Procesar',
+    'table.actions.complete_order.label' => 'Completar',
+    'table.actions.complete_order.success' => 'La orden fue completada correctamente.',
 
     'table.filters.status.label' => 'Estado',
+    'page.actions.process_order.label' => 'Procesar orden',
+    'page.actions.process_order.success' => 'La orden fue pasada a en proceso.',
+    'page.actions.complete_order.label' => 'Completar orden',
+    'page.actions.complete_order.success' => 'La orden fue completada correctamente.',
+    'tabs.all' => 'Todos',
 
     'form.fields.order_products.label' => 'Productos',
 
@@ -57,5 +66,6 @@ return [
     'form.fields.status.placeholder' => 'Selecciona el estado',
     'form.fields.status.helper_text' => 'Estado actual de la orden.',
     'form.fields.status.hint' => '',
+    'form.fields.status.validation.completed_requires_full_payment' => 'Para marcar la orden como completada, los pagos deben cubrir el total de la orden.',
 
 ];

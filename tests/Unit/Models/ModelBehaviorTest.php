@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Models;
 
-use App\Actions\CreatePaymentAction;
+use App\Actions\Payments\CreatePayment;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethods;
 use App\Enums\ProductStatus;
@@ -92,7 +92,7 @@ class ModelBehaviorTest extends TestCase
             'server_id' => $user->id,
         ]);
 
-        $payment = CreatePaymentAction::handle([
+        $payment = CreatePayment::execute([
             'reference' => 'PAY-002',
             'method' => PaymentMethods::Zelle,
             'amount' => 4.20,

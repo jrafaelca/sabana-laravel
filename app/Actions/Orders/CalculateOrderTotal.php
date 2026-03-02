@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Orders;
 
 use App\Models\Order;
 
-class CalculateOrderTotalAction
+class CalculateOrderTotal
 {
     /**
      * @param  array<int, array<string, mixed>>  $orderProducts
      */
-    public static function handle(array $orderProducts): float
+    public static function execute(array $orderProducts): float
     {
         return (float) collect($orderProducts)
             ->sum(fn (mixed $orderProduct): float => (float) data_get($orderProduct, 'total_price', 0));

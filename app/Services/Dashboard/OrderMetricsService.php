@@ -325,8 +325,12 @@ class OrderMetricsService
             ->whereBetween('completed_at', [$start, $end]);
     }
 
-    public function paymentMethodLabel(string $method): string
+    public function paymentMethodLabel(PaymentMethods|string $method): string
     {
+        if ($method instanceof PaymentMethods) {
+            return (string) $method->getLabel();
+        }
+
         $methodEnum = PaymentMethods::tryFrom($method);
 
         if ($methodEnum === null) {

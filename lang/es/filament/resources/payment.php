@@ -74,4 +74,7 @@ return [
     'form.fields.note.placeholder' => 'Ingresa una nota para el pago',
     'form.fields.note.helper_text' => 'Detalles adicionales sobre el pago.',
     'form.fields.note.hint' => '',
+
+    // Form errors
+    'form.errors.order_paid' => 'La orden ya se encuentra pagada.',
 ];

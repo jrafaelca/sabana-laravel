@@ -164,6 +164,15 @@ class OrderMetricsServiceTest extends TestCase
         CarbonImmutable::setTestNow();
     }
 
+    public function test_it_returns_payment_method_label_for_enum_instances(): void
+    {
+        $service = app(OrderMetricsService::class);
+
+        $label = $service->paymentMethodLabel(PaymentMethods::DebitCard);
+
+        $this->assertSame((string) PaymentMethods::DebitCard->getLabel(), $label);
+    }
+
     private function createProduct(string $name, string $slug, float $cost, float $price): Product
     {
         return Product::query()->create([

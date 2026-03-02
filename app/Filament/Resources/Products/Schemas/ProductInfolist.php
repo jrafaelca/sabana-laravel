@@ -2,15 +2,8 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
-use App\Filament\Resources\Products\Schemas\Components\ProductCostEntry;
-use App\Filament\Resources\Products\Schemas\Components\ProductCreatedAtEntry;
-use App\Filament\Resources\Products\Schemas\Components\ProductDeletedAtEntry;
-use App\Filament\Resources\Products\Schemas\Components\ProductDescriptionEntry;
-use App\Filament\Resources\Products\Schemas\Components\ProductNameEntry;
-use App\Filament\Resources\Products\Schemas\Components\ProductPriceEntry;
-use App\Filament\Resources\Products\Schemas\Components\ProductSlugEntry;
-use App\Filament\Resources\Products\Schemas\Components\ProductStatusEntry;
-use App\Filament\Resources\Products\Schemas\Components\ProductUpdatedAtEntry;
+use App\Models\Product;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 
 class ProductInfolist
@@ -19,15 +12,58 @@ class ProductInfolist
     {
         return $schema
             ->components([
-                ProductStatusEntry::make(),
-                ProductNameEntry::make(),
-                ProductSlugEntry::make(),
-                ProductDescriptionEntry::make(),
-                ProductCostEntry::make(),
-                ProductPriceEntry::make(),
-                ProductCreatedAtEntry::make(),
-                ProductUpdatedAtEntry::make(),
-                ProductDeletedAtEntry::make(),
+                TextEntry::make('status')
+                    ->label(trans('filament/resources/product.infolist.status.label'))
+                    ->placeholder(trans('filament/resources/product.infolist.status.placeholder'))
+                    ->helperText(trans('filament/resources/product.infolist.status.helper_text'))
+                    ->hint(trans('filament/resources/product.infolist.status.hint'))
+                    ->badge(),
+                TextEntry::make('name')
+                    ->label(trans('filament/resources/product.infolist.name.label'))
+                    ->placeholder(trans('filament/resources/product.infolist.name.placeholder'))
+                    ->helperText(trans('filament/resources/product.infolist.name.helper_text'))
+                    ->hint(trans('filament/resources/product.infolist.name.hint')),
+                TextEntry::make('slug')
+                    ->label(trans('filament/resources/product.infolist.slug.label'))
+                    ->placeholder(trans('filament/resources/product.infolist.slug.placeholder'))
+                    ->helperText(trans('filament/resources/product.infolist.slug.helper_text'))
+                    ->hint(trans('filament/resources/product.infolist.slug.hint')),
+                TextEntry::make('description')
+                    ->label(trans('filament/resources/product.infolist.description.label'))
+                    ->placeholder(trans('filament/resources/product.infolist.description.placeholder'))
+                    ->helperText(trans('filament/resources/product.infolist.description.helper_text'))
+                    ->hint(trans('filament/resources/product.infolist.description.hint')),
+                TextEntry::make('cost')
+                    ->label(trans('filament/resources/product.infolist.cost.label'))
+                    ->placeholder(trans('filament/resources/product.infolist.cost.placeholder'))
+                    ->helperText(trans('filament/resources/product.infolist.cost.helper_text'))
+                    ->hint(trans('filament/resources/product.infolist.cost.hint'))
+                    ->money(),
+                TextEntry::make('price')
+                    ->label(trans('filament/resources/product.infolist.price.label'))
+                    ->placeholder(trans('filament/resources/product.infolist.price.placeholder'))
+                    ->helperText(trans('filament/resources/product.infolist.price.helper_text'))
+                    ->hint(trans('filament/resources/product.infolist.price.hint'))
+                    ->money(),
+                TextEntry::make('created_at')
+                    ->label(trans('filament/resources/product.infolist.created_at.label'))
+                    ->placeholder(trans('filament/resources/product.infolist.created_at.placeholder'))
+                    ->helperText(trans('filament/resources/product.infolist.created_at.helper_text'))
+                    ->hint(trans('filament/resources/product.infolist.created_at.hint'))
+                    ->dateTime(),
+                TextEntry::make('updated_at')
+                    ->label(trans('filament/resources/product.infolist.updated_at.label'))
+                    ->placeholder(trans('filament/resources/product.infolist.updated_at.placeholder'))
+                    ->helperText(trans('filament/resources/product.infolist.updated_at.helper_text'))
+                    ->hint(trans('filament/resources/product.infolist.updated_at.hint'))
+                    ->dateTime(),
+                TextEntry::make('deleted_at')
+                    ->label(trans('filament/resources/product.infolist.deleted_at.label'))
+                    ->placeholder(trans('filament/resources/product.infolist.deleted_at.placeholder'))
+                    ->helperText(trans('filament/resources/product.infolist.deleted_at.helper_text'))
+                    ->hint(trans('filament/resources/product.infolist.deleted_at.hint'))
+                    ->dateTime()
+                    ->visible(fn (Product $record): bool => $record->trashed()),
             ]);
     }
 }

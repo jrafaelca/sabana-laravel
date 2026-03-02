@@ -5,6 +5,7 @@ namespace Tests\Feature\Filament;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethods;
 use App\Filament\Resources\Orders\Pages\EditOrder;
+use App\Filament\Resources\Orders\Pages\ViewOrder;
 use App\Filament\Resources\Orders\RelationManagers\PaymentsRelationManager;
 use App\Filament\Resources\Products\ProductResource;
 use App\Models\Order;
@@ -131,6 +132,91 @@ class PaymentsRelationManagerTest extends TestCase
         $this->assertSame($order->id, $payment->order_id);
         $this->assertSame($creator->id, $payment->creator_id);
         $this->assertSame(PaymentMethods::CreditCard, $payment->method);
+    }
+
+    public function test_it_calculates_pending_balance_for_payment_prefill(): void
+    {
+        $creator = User::factory()->create();
+        $this->actingAs($creator);
+
+        $order = Order::query()->create([
+            'status' => OrderStatus::Completed,
+            'notes' => 'Mesa 20',
+            'total' => 100.00,
+            'creator_id' => $creator->id,
+            'server_id' => $creator->id,
+        ]);
+
+        Payment::query()->create([
+            'reference' => 'REL-004',
+            'method' => PaymentMethods::Cash,
+            'amount' => 35.50,
+            'note' => 'Abono',
+            'order_id' => $order->id,
+            'creator_id' => $creator->id,
+        ]);
+
+        $livewire = Livewire::test(PaymentsRelationManager::class, [
+            'ownerRecord' => $order,
+            'pageClass' => ViewOrder::class,
+        ])->assertTableHeaderActionsExistInOrder(['create']);
+
+        /** @var PaymentsRelationManager $manager */
+        $manager = $livewire->instance();
+        $pendingBalance = (fn (): float => $this->getPendingBalanceAmount())->call($manager);
+
+        $this->assertEqualsWithDelta(64.5, $pendingBalance, 0.001);
+    }
+
+    public function test_view_order_page_is_accessible_and_can_render_payments_relation_manager(): void
+    {
+        $creator = User::factory()->create();
+        $this->actingAs($creator);
+
+        $order = Order::query()->create([
+            'status' => OrderStatus::Completed,
+            'notes' => 'Mesa 21',
+            'total' => 50.00,
+            'creator_id' => $creator->id,
+            'server_id' => $creator->id,
+        ]);
+
+        Livewire::test(ViewOrder::class, [
+            'record' => $order->getKey(),
+        ])->assertSuccessful();
+
+        Livewire::test(PaymentsRelationManager::class, [
+            'ownerRecord' => $order,
+            'pageClass' => ViewOrder::class,
+        ])->assertTableHeaderActionsExistInOrder(['create']);
+    }
+
+    public function test_it_hides_create_payment_action_when_order_is_fully_paid(): void
+    {
+        $creator = User::factory()->create();
+        $this->actingAs($creator);
+
+        $order = Order::query()->create([
+            'status' => OrderStatus::Completed,
+            'notes' => 'Mesa 22',
+            'total' => 50.00,
+            'creator_id' => $creator->id,
+            'server_id' => $creator->id,
+        ]);
+
+        Payment::query()->create([
+            'reference' => 'REL-006',
+            'method' => PaymentMethods::Cash,
+            'amount' => 50.00,
+            'note' => 'Pago total',
+            'order_id' => $order->id,
+            'creator_id' => $creator->id,
+        ]);
+
+        Livewire::test(PaymentsRelationManager::class, [
+            'ownerRecord' => $order,
+            'pageClass' => ViewOrder::class,
+        ])->assertTableActionHidden('create');
     }
 
     public function test_product_resource_record_binding_query_includes_soft_deleted_records(): void

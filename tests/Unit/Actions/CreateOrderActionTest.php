@@ -2,19 +2,19 @@
 
 namespace Tests\Unit\Actions;
 
-use App\Actions\CreateOrderAction;
+use App\Actions\Orders\CreateOrder;
 use App\Enums\OrderStatus;
 use App\Models\User;
 use Tests\TestCase;
 
-class CreateOrderActionTest extends TestCase
+class CreateOrderTest extends TestCase
 {
     public function test_it_creates_an_order_and_assigns_the_authenticated_creator(): void
     {
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $order = CreateOrderAction::handle([
+        $order = CreateOrder::execute([
             'status' => OrderStatus::Pending,
             'notes' => 'Orden de prueba',
             'total' => 15.75,
