@@ -11,11 +11,13 @@ use App\Filament\Resources\Orders\Tables\Columns\OrderNumberColumn;
 use App\Filament\Resources\Orders\Tables\Columns\OrderServerColumn;
 use App\Filament\Resources\Orders\Tables\Columns\OrderStatusColumn;
 use App\Filament\Resources\Orders\Tables\Columns\OrderUpdatedAtColumn;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
@@ -39,7 +41,10 @@ class OrdersTable
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                EditAction::make(),
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                ])
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
